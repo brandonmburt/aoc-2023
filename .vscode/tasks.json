@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Run TypeScript",
+        "type": "shell",
+        "command": "./node_modules/.bin/ts-node",
+        "args": ["${relativeFile}"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always"
+        }
+      }
+    ]
+  }
+  
