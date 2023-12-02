@@ -20,8 +20,8 @@ export class Wrapper {
         switch (day) {
             case 1:
                 return Puzzles.solvePuzzle1(input);
-            // case 2:
-            //     return Puzzles.solvePuzzle2(input);
+            case 2:
+                return Puzzles.solvePuzzle2(input);
             // case 3:
             //     return Puzzles.solvePuzzle3(input);
             // case 4:
