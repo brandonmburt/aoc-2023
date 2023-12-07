@@ -2,61 +2,47 @@
 
 export function solvePuzzle1(input: string): [number, number] {
 
-    let p1 = 0, p2 = 0, arr = input.split('\n');
-    const startingChars = ['o', 't', 'f', 's', 'e', 'n'];
+    let arr = input.split('\n');
+    const startingChars = new Set(['o', 't', 'f', 's', 'e', 'n']);
+    const numMap = new Map([
+        ['one', '1'],
+        ['two', '2'],
+        ['three', '3'],
+        ['four', '4'],
+        ['five', '5'],
+        ['six', '6'],
+        ['seven', '7'],
+        ['eight', '8'],
+        ['nine', '9']
+    ]);
 
     const getVal = (line: string, i: number): string => {
-        if (line.substring(i, i + 3) === 'one') return '1';
-        else if (line.substring(i, i + 3) === 'two') return '2';
-        else if (line.substring(i, i + 5) === 'three') return '3';
-        else if (line.substring(i, i + 4) === 'four') return '4';
-        else if (line.substring(i, i + 4) === 'five') return '5';
-        else if (line.substring(i, i + 3) === 'six') return '6';
-        else if (line.substring(i, i + 5) === 'seven') return '7';
-        else if (line.substring(i, i + 5) === 'eight') return '8';
-        else if (line.substring(i, i + 4) === 'nine') return '9';
-        else return null;
+        for (let len=3; len<=5; len++) {
+            let subStr = line.substring(i, i + len);
+            if (numMap.has(subStr)) return numMap.get(subStr);
+        }
+        return null;
     }
 
     /** P1 */
-    arr.forEach((line) => {
-        let leftI = 0, rightI = line.length - 1;
-        while (leftI <= rightI && isNaN(+line[leftI])) leftI++;
-        while (rightI >= 0 && isNaN(+line[rightI])) rightI--;
-        p1 += +(line[leftI] + line[rightI]);
-    });
+    const getInt = (arr: string[]): string => arr.find(c => !isNaN(+c));
+    const p1 = arr.reduce((acc, line) => acc += +(getInt(line.split('')) + getInt(line.split('').reverse())), 0);
 
     /** P2 */
-    arr.forEach((line) => {
-        let leftI = 0, rightI = line.length - 1, val = '';
-        while (leftI <= rightI) {
-            if (!isNaN(+line[leftI])) {
-                val += line[leftI];
-                break;
-            } else if (startingChars.includes(line[leftI])) {
-                let checkVal = getVal(line, leftI);
-                if (checkVal) {
-                    val += checkVal;
-                    break;
-                }
-            }
-            leftI++;
-        }
+    const getCalibration = (line: string): number => {
+        let leftI = line.split('').findIndex((c, i) => {
+            if (!isNaN(+c)) return true;
+            else if (startingChars.has(c) && getVal(line, i) !== null) return true;
+        });
+        let rightI = line.length-1;
         while (rightI >= 0) {
-            if (!isNaN(+line[rightI])) {
-                val += line[rightI];
-                break;
-            } else if (startingChars.includes(line[rightI])) {
-                let checkVal = getVal(line, rightI);
-                if (checkVal) {
-                    val += checkVal;
-                    break;
-                }
-            }
-            rightI--;
+            if (!isNaN(+line[rightI]) || (startingChars.has(line[rightI]) && getVal(line, rightI) !== null)) break;
+            else rightI--;
         }
-        p2 += +val;
-    });
+        let l = +line[leftI] ? line[leftI] : getVal(line, leftI), r = +line[rightI] ? line[rightI] : getVal(line, rightI);
+        return +(l + r);
+    }
+    const p2 = arr.reduce((acc, line) => acc += getCalibration(line), 0);
 
     return [p1, p2];
 
