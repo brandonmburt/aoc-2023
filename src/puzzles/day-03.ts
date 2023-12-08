@@ -2,20 +2,11 @@
 
 export function solvePuzzle3(input: string): [number, number] {
 
-    const arr: string[][] = input.split('\n').map(x => x.split(''));
-    const n = arr.length, m = arr[0].length;
+    const arr: string[][] = input.split('\n').map(x => x.split('')), n = arr.length, m = arr[0].length;
+    const adjOffsets = [[-1, 0], [-1, -1], [-1, 1], [0, -1], [0, 1], [1, 0], [1, -1], [1, 1]];
 
-    const getAdj = (row, col) => {
-        return [
-            [row-1, col],
-            [row-1, col-1],
-            [row-1, col+1],
-            [row, col-1],
-            [row, col+1],
-            [row+1, col],
-            [row+1, col-1],
-            [row+1, col+1]
-        ].filter(([x, y]) => x >= 0 && x < n && y >= 0 && y < m);
+    const getAdj = (row: number, col: number) => {
+        return adjOffsets.map(([x, y]) => [row+x, col+y]).filter(([x, y]) => x >= 0 && x < n && y >= 0 && y < m);
     }
 
     let p1 = 0, p2 = 0;
@@ -58,6 +49,7 @@ export function solvePuzzle3(input: string): [number, number] {
         }
     });
 
+    // 549908, 81166799
     return [p1, p2];
 
 }
