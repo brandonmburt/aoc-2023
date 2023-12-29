@@ -20,5 +20,8 @@
   "devDependencies": {
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "numeric": "^1.2.6"
   }
 }
